@@ -17,5 +17,13 @@ services:
     volumes:
       - ./frontend:/usr/share/nginx/html
 
+  web3-signer:
+    build:
+      context: ./web3-signer
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./web3-signer:/www
+
   redis:
     image: "redis:alpine"

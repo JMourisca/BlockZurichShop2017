@@ -7,14 +7,13 @@ LABEL authors="Zouhir Chahoud <zouhir@zouhir.org>"
 RUN apk add --update nodejs bash git
 
 # Install app dependencies
-COPY package.json /www/package.json
-RUN cd /www; npm install
-
+#COPY package.json /www/package.json
 # Copy app source
 COPY . /www
+WORKDIR /www
+RUN npm install
 
 # Set work directory to /www
-WORKDIR /www
 
 # set your port
 ENV PORT 8080

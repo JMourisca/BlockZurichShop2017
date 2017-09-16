@@ -11,6 +11,7 @@ from flask_cors import CORS
 
 # Json imports.
 import json
+import urllib
 from urllib import parse
 
 # Logging imports.
@@ -79,6 +80,8 @@ def call_web3(confirmed_purchase):
     #MyContract = web3.eth.contract(abi)
     #MyContract.address = "0xc4abd0339eb8d57087278718986382264244252f"
     #success = MyContract.doPurchase(product_id, merchant, blog_owner, is_siroop, amount)
+    urllib.request.urlopen("http://web3-signer:8080/api/do_transaction").read()
+
     success = True
 
     from random import randint
