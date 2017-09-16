@@ -82,50 +82,6 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-    <script>
-    var uportconnect = window.uportconnect;
-
-    const uport = new uportconnect.Connect('Juliana\'s new app', {
-        clientId: '2odUiw5GfTvpNAMuGgLoxYvydLfzHbSytBw',
-        network: 'rinkeby',
-        signer: uportconnect.SimpleSigner('6bfb53228fdc0511e3af337a7d2dda5fcf57a19e98467b9554056bf7db909bdd')
-    });
-
-    uport.requestCredentials(
-        {
-            requested: ['name', 'phone', 'country'],
-            notifications: true
-        },
-        (credentials) => {
-            const qr = kjua({
-                text: credentials,
-                size: 400,
-                fill: "#816263"
-            });
-
-            document.getElementById("qrcode").appendChild(qr);
-        }
-    ).then(
-        (credentials) => {
-            var data = {
-                "credentials": credentials,
-                "amount": document.getElementById("amount").value
-            };
-            $.ajax({
-                type: 'POST',
-                url: "http://localhost:5000/confirm_purchase",
-                data: data,
-                error: function (e) {
-                   console.log(e);
-                },
-                dataType: "json",
-                    contentType: "application/json"
-                });
-            });
-    </script>
-</script>
-=======
 </script>
 
 <script type="text/ng-template" id="myModalConfirmation.html">
@@ -139,9 +95,8 @@
     </div>
     <div class="modal-body" id="modal-body">
         <div>
-            <h3>Your order number is {{$ctrl.response.block_number}}. You will receive a confirmation email shortly</h3>
+            <h3>Your order number is {{$ctrl.response.order_nr}}. You will receive a confirmation email shortly</h3>
             <img style="width: 98%" src="images/ThankYou.png">
         </div>
     </div>
 </script>
->>>>>>> refs/remotes/origin/master
