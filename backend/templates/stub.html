@@ -23,7 +23,7 @@
     </form>
 
     <h1>Confirm purchase:</h1>
-    <form action="/confirm_purchase1" method="post">
+    <form action="/confirm_purchase_form" method="post">
         <input type="text" name="confirmed_purchase" placeholder="confirmed purchase">
         <input type="submit" value="Confirm">
     </form>
@@ -53,16 +53,16 @@
 
         console.log(credentials)
 
-$.ajax({
-  type: 'POST',
-  url: "http://172.18.0.2:5000/confirm_purchase",
-  data: JSON.stringify({"test": "test"}),
-  error: function(e) {
-    console.log(e);
-  },
-  dataType: "json",
-  contentType: "application/json"
-});
+        $.ajax({
+          type: 'POST',
+          url: "http://172.18.0.2:5000/confirm_purchase",
+          data: JSON.stringify({"test": "test"}),
+          error: function(e) {
+            console.log(e);
+          },
+          dataType: "json",
+          contentType: "application/json"
+        });
 
     })
 

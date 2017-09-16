@@ -106,7 +106,6 @@ def new_purchase():
         # on what it will be: angular, ajax, etc.
         return no_purchase_possible()
 
-
     # Set processed data with the result from uport into html popup.
     # Again, depends on if it is angular, ajax, etc.
     return set_popup_data_in_html(success_popup_data)
@@ -122,12 +121,9 @@ def confirm_purchase():
     # confirmed_purchase = get_confirmed_purchase()
 
     jsdata = json.loads(request.data)
-    print(jsdata)
-
     return jsdata
 
     # confirmed_purchase = json.loads(jsdata)[0]
-    #
     #
     # # Call web3 api.
     # success, confirmed_purchase = call_web3(confirmed_purchase)
