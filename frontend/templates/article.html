@@ -26,7 +26,8 @@
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header" ng-if="!$ctrl.loading">
         <h4 class="pull-left">{{$ctrl.selected_article.name}}</h4>
-        <button style="border: none; background: none" type="button" class="pull-right" ng-click="$ctrl.cancel()">
+        <button style="border: none; background: none" type="button" id="close_modal" class="pull-right"
+                ng-click="$ctrl.cancel()">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         </button>
         <div class="clearfix"></div>
@@ -39,7 +40,8 @@
             <div class="form-inline">
                 <div class="form-group" style="width: 140px">
                     <label for="size">Amount</label>
-                    <input type="number" style="width: 85px" class="form-control" id="amount" ng-model="$ctrl.amount" placeholder="Amount">
+                    <input type="number" style="width: 85px" class="form-control" id="amount" ng-model="$ctrl.amount"
+                           placeholder="Amount">
                 </div>
                 <div class="form-group">
                     <label for="size">Size</label>
@@ -59,24 +61,28 @@
                 </div>
                 <div class="form-group" style="width: 150px">
                     <label for="totalAmount">Total</label>
-                    <input  style="width: 116px" type="text" class="form-control" readonly ng-value="($ctrl.amount * $ctrl.selected_article.price/(100 * $ctrl.selected_article.exchange) | currency:'ETH ')">
-                    <input type="hidden" id="unitValue" ng-value="$ctrl.selected_article.price/(100 * $ctrl.selected_article.exchange)">
-            </div>
-            <p class="text-center">
-                <div id="qrcode" style="text-align: center;margin-top: 20px"></div>
-            </p>
-            <p>
-                <span class="help-block">Some help about what to do to procede.</span>
-            </p>
-            <p class="text-right">
-                Powered by
+                    <input style="width: 116px" type="text" class="form-control" id="totalAmount" readonly
+                           ng-value="($ctrl.amount * $ctrl.selected_article.price/(100 * $ctrl.selected_article.exchange) | currency:'ETH ')">
+                    <input type="hidden" id="unitValue"
+                           ng-value="$ctrl.selected_article.price/(100 * $ctrl.selected_article.exchange)">
+                </div>
+                <div class="text-center">
+                    <div id="qrcode" style="text-align: center;margin-top: 20px"></div>
+                </div>
+                <p>
+                    <span class="help-block">Some help about what to do to procede.</span>
+                </p>
+                <p class="text-right">
+                    Powered by
                 <span style="background-color: #5f32b8;padding: 5px 5px 8px;">
                     <img style="height: 20px"
                          src="//static1.squarespace.com/static/587fd54aa5790a84241a00e6/t/59b020b79f8dced99c4f70da/1504717205849/?format=1500w">
                 </span>
-            </p>
+                </p>
+            </div>
         </div>
     </div>
+<<<<<<< HEAD
     <script>
     var uportconnect = window.uportconnect;
 
@@ -119,3 +125,23 @@
             });
     </script>
 </script>
+=======
+</script>
+
+<script type="text/ng-template" id="myModalConfirmation.html">
+    <div class="modal-header" ng-if="!$ctrl.loading">
+        <h4 class="pull-left">Purchase finalized</h4>
+        <button style="border: none; background: none" type="button" id="close_modal2" class="pull-right"
+                ng-click="$ctrl.cancel()">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+        <div class="clearfix"></div>
+    </div>
+    <div class="modal-body" id="modal-body">
+        <div>
+            <h3>Your order number is {{$ctrl.response.block_number}}. You will receive a confirmation email shortly</h3>
+            <img style="width: 98%" src="images/ThankYou.png">
+        </div>
+    </div>
+</script>
+>>>>>>> refs/remotes/origin/master

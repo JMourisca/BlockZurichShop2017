@@ -20,22 +20,96 @@ app.controller('ProductsController', function PhoneListController($scope, $uibMo
             $ctrl.articles[1] = res.data[0];
         }
     );
-}).controller('ModalInstanceCtrl', function ($uibModalInstance, $log, $http, selected_article) {
+}).controller('ModalInstanceCtrl', function ($uibModalInstance, $log, $http, $uibModal, selected_article) {
     var $ctrl = this;
-    $ctrl.loading = true;
+    $ctrl.loading = false;
     $ctrl.selected_article = selected_article;
     $ctrl.amount = 1;
 
-    //$http.get("http://localhost:5000/test").then(function (res) {
-    $ctrl.loading = false;
-    //  return $ctrl.selected_article;
-    //});
+    // Uport connection - display QRCode
+    var uportconnect = window.uportconnect;
 
-    $log.info($ctrl.selected_article);
+    const uport = new uportconnect.Connect('Juliana\'s new app', {
+        clientId: '2odUiw5GfTvpNAMuGgLoxYvydLfzHbSytBw',
+        network: 'rinkeby',
+        signer: uportconnect.SimpleSigner('6bfb53228fdc0511e3af337a7d2dda5fcf57a19e98467b9554056bf7db909bdd')
+    });
 
-    $ctrl.ok = function () {
+    uport.requestCredentials(
+        {
+            requested: ['name', 'phone', 'email'],
+            notifications: true
+        },
+        (credentials) => {
+            const qr = kjua({
+                text: credentials,
+                size: 400,
+                fill: "#816263"
+            });
+
+            document.getElementById("qrcode").appendChild(qr);
+        }
+    ).then(
+        (credentials) => {
+            var data = {
+                "credentials": credentials,
+                "amount": document.getElementById("amount").value
+            };
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:5000/confirm_purchase",
+                data: data,
+
+                error: function (e) {
+                    $log.error("Something went wrong");
+                    $ctrl.cancel();
+                },
+                dataType: "json",
+                contentType: "application/json"
+            }).done(function (res) {
+                $ctrl.ok(res);
+            });
+    });
+    // END OF UPORT CONNECT
+
+    $ctrl.ok = function (res) {
         $uibModalInstance.close($ctrl.selected_article.name);
+
+        $ctrl.open = function (size, parentSelector) {
+            var parentElem = parentSelector ?
+                angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+            var modalInstance = $uibModal.open({
+                animation: $ctrl.animationsEnabled,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'myModalConfirmation.html',
+                controller: 'ModalConfirmationCtrl',
+                controllerAs: '$ctrl',
+                size: size,
+                appendTo: parentElem,
+                resolve: {
+                    response: function () {
+                        return res;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $ctrl.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+        $ctrl.open();
     };
+
+    $ctrl.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}).controller('ModalConfirmationCtrl', function ($uibModalInstance, $log, $http, response) {
+    var $ctrl = this;
+
+    $ctrl.response = response;
 
     $ctrl.cancel = function () {
         $uibModalInstance.dismiss('cancel');
