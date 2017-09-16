@@ -104,7 +104,7 @@
         (credentials) => {
             var data = {
                 "credentials": credentials,
-                "amount": document.getElementById("amount")
+                "amount": document.getElementById("amount").value
             };
             $.ajax({
                 type: 'POST',
