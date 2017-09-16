@@ -9,6 +9,8 @@ contract SmartBuyer is Ownable {
   //mapping (address => bool) public affiliates;
   mapping (address => bool) public merchants;
   mapping (address => bool) public blogOwners;
+
+  uint productPointer;
   mapping (uint => address) public products;
   mapping (uint => bool) public electronicProducts;
 
@@ -89,9 +91,12 @@ contract SmartBuyer is Ownable {
     blogOwners[_blogOwner] = true;
   }
 
-  function addProduct(uint _productID, address _merchant, bool _category) public onlyOwner {
-    products[_productID] = _merchant;
-    electronicProducts[_productID] = _category;
+  function addProduct(address _merchant, bool _category, uint _maxOrder, uint _amountStock) public onlyOwner {
+    products[productPointer] = _merchant;
+    electronicProducts[productPointer] = _category;
+    productMaxOrders[productPointer] = _maxOrder;
+    productStock[productPointer] = _amountStock;
+    productPointer++;
   }
 
   // package delivery
@@ -112,11 +117,13 @@ contract SmartBuyer is Ownable {
 
 
   // Check if user provided parameters are on whitelist otherwise an attack could inject own parameters
-  function doPurchase(uint _productID, address _merchant, address _blogOwner, bool isSiroop) payable public
+  function doPurchase(uint _productID, address _merchant, address _blogOwner, bool isSiroop, uint _amount) payable public
 
   isMerchant(_merchant)
   isBlogOwner(_blogOwner)
   productFitsMerchant(_productID, _merchant)
+  checkMaxOrders(_productID, _amount)
+  checkProductStock(_productID, _amount)
   // TODO: implement price check of product, currently every price is accepted!!
   returns(bool result) {
     result = saveSplit(_productID, _merchant, _blogOwner, isSiroop);
