@@ -87,12 +87,22 @@ def call_web3(confirmed_purchase):
     is_siroop = False
     amount = 1
 
-    contract = web3.eth.contract(abi).at('0x76E9AbeF06dfCD3b862234CcfC5030Fd8Ba231d7')
+    app.logger.info("it will try web4.eth.contract")
+
+    contract = web3.eth.contract(abi)
+    contract.address = '0x76E9AbeF06dfCD3b862234CcfC5030Fd8Ba231d7'
+
     #myContractInstance = MyContract.at('0xc4abd0339eb8d57087278718986382264244252f');
 
-
     send_from = "0x39092e309f00B8B9702653865f7B26005EC61982"
-    # success = instance.doPurchase(product_id, merchant, blog_owner, is_siroop, amount)
+
+    app.logger.info("it will try doPurchase")
+    try:
+        success = contract.doPurchase(product_id, merchant, blog_owner, is_siroop, amount)
+    except Exception as ex:
+        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        app.logger.error(message)
 
     # pending = web3.eth.pendingTransactions
     # app.logger.info("pending: %s ", pending[0])

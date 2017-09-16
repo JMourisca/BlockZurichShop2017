@@ -39,3 +39,93 @@ call_web3
 block_number: 4281224
 balance: 740021584819750779479303 Ether
 data: 99
+confirm_purchase
+call_web3
+block_number: 905151
+balance: 0 Ether
+data: 99
+An exception of type AttributeError occurred. Arguments:
+("type object 'Contract' has no attribute 'at'",)
+True
+confirm_purchase
+call_web3
+block_number: 905169
+balance: 0 Ether
+data: 99
+it will try web4.eth.contract
+An exception of type AttributeError occurred. Arguments:
+("type object 'Contract' has no attribute 'at'",)
+it will try doPurchase
+An exception of type UnboundLocalError occurred. Arguments:
+("local variable 'contract' referenced before assignment",)
+True
+confirm_purchase
+call_web3
+block_number: 905178
+balance: 0 Ether
+data: 99
+it will try web4.eth.contract
+it will try doPurchase
+An exception of type AttributeError occurred. Arguments:
+("type object 'Contract' has no attribute 'doPurchase'",)
+True
+confirm_purchase
+call_web3
+block_number: 905451
+balance: 0 Ether
+data: 99
+it will try web4.eth.contract
+it will try doPurchase
+An exception of type AttributeError occurred. Arguments:
+("type object 'Contract' has no attribute 'doPurchase'",)
+True
+confirm_purchase
+call_web3
+block_number: 905546
+balance: 0 Ether
+data: 99
+it will try web4.eth.contract
+it will try doPurchase
+An exception of type AttributeError occurred. Arguments:
+("type object 'Contract' has no attribute 'doPurchase'",)
+True
+confirm_purchase
+call_web3
+block_number: 905586
+balance: 0 Ether
+data: 99
+it will try web4.eth.contract
+it will try doPurchase
+An exception of type AttributeError occurred. Arguments:
+("type object 'Contract' has no attribute 'doPurchase'",)
+True
+confirm_purchase
+call_web3
+block_number: 905608
+balance: 0 Ether
+data: 99
+it will try web4.eth.contract
+it will try doPurchase
+An exception of type AttributeError occurred. Arguments:
+("type object 'Contract' has no attribute 'doPurchase'",)
+True
+confirm_purchase
+call_web3
+block_number: 905612
+balance: 0 Ether
+data: 99
+it will try web4.eth.contract
+it will try doPurchase
+An exception of type AttributeError occurred. Arguments:
+("type object 'Contract' has no attribute 'doPurchase'",)
+True
+confirm_purchase
+call_web3
+block_number: 905615
+balance: 0 Ether
+data: 99
+it will try web4.eth.contract
+it will try doPurchase
+An exception of type AttributeError occurred. Arguments:
+("type object 'Contract' has no attribute 'doPurchase'",)
+True
