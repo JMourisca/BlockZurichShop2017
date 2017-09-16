@@ -1,41 +1,6 @@
+
 confirm_purchase
-call_web3
-block_number: 905051
-balance: 0 Ether
-data: 99
 confirm_purchase
-call_web3
-block_number: 905059
-balance: 0 Ether
-data: 99
 confirm_purchase
-call_web3
-block_number: 905068
-balance: 0 Ether
-data: 99
 confirm_purchase
-call_web3
-block_number: 905084
-balance: 0 Ether
-data: 99
 confirm_purchase
-call_web3
-block_number: 905092
-balance: 0 Ether
-data: 99
-True
-confirm_purchase
-call_web3
-block_number: 905096
-balance: 0 Ether
-data: 99
-confirm_purchase
-call_web3
-block_number: 905105
-balance: 0 Ether
-data: 99
-confirm_purchase
-call_web3
-block_number: 4281224
-balance: 740021584819750779479303 Ether
-data: 99
