@@ -3,14 +3,15 @@
 # Flask imports.
 from flask import Flask
 from flask import render_template
-from flask import request
+from flask import request, jsonify
 
 # Flask cors imports.
-from flask.ext.cors import CORS
-from flask.ext.cors import cross_origin
+from flask_cors import CORS
 
 # Json imports.
 import json
+import logging
+from logging.handlers import RotatingFileHandler
 
 # Web3 imports.
 from web3 import Web3
@@ -19,6 +20,7 @@ from web3 import HTTPProvider
 
 # Call the app.
 app = Flask(__name__)
+CORS(app)
 
 
 # Store purchase data in json format.
@@ -54,12 +56,13 @@ def call_web3(confirmed_purchase):
     account = "0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe"
     balance = web3.eth.getBalance(account)
     #
-    print(["block_number: ", block_number])
-    print(["balance: ", balance, " Ether"])
-    print(["data: ",  confirmed_purchase])
+    app.logger.info("call_web3")
+    app.logger.info("block_number: %s", block_number)
+    app.logger.info("balance: %s Ether", balance)
+    app.logger.info("data: %s",  confirmed_purchase[0])
 
     #
-    return [True, confirmed_purchase]
+    return [True, confirmed_purchase, block_number, balance]
 
 
 # To be implemented after the front end is finished.
@@ -71,14 +74,6 @@ def no_purchase_possible():
 
 def set_popup_data_in_html(data):
     return data
-
-
-def print_success_message(confirmed_purchase):
-    return confirmed_purchase
-
-
-def print_error_message():
-    return "Purchase could not be processed!"
 
 
 # Generate index.html.
@@ -114,30 +109,25 @@ def new_purchase():
 
 
 # Confirm final purchase.
-# @cross_origin(origin="localhost", headers=["Content-Type", "Authorization"])
 @app.route("/confirm_purchase", methods=["POST"])
 def confirm_purchase():
 
-    # Request the confirmed purchase as json.
-    # confirmed_purchase = get_confirmed_purchase()
+    jsdata = request.data
 
-    jsdata = json.loads(request.data)
-    print(jsdata)
-
-    return jsdata
-
-    # confirmed_purchase = json.loads(jsdata)[0]
-    #
-    #
     # # Call web3 api.
-    # success, confirmed_purchase = call_web3(confirmed_purchase)
+    app.logger.info("confirm_purchase")
+    success, confirmed_purchase, block_number, balance = call_web3(jsdata)
+    app.logger.info(success)
     #
     # # Here we again generate the proper popup with angular or whatever.
-    # if success:
-    #     return print_success_message(confirmed_purchase)
-    # else:
-    #     return print_error_message()
+    if success:
+        return jsonify({'msg': 'success', 'block_number': block_number, 'balance': balance})
+    else:
+        return jsonify("{'msg': 'error'}")
 
 
 if __name__ == "__main__":
+    handler = RotatingFileHandler('/tmp/dev.log', maxBytes=10000, backupCount=1)
+    handler.setLevel(logging.INFO)
+    app.logger.addHandler(handler)
     app.run(host="0.0.0.0", debug=True)

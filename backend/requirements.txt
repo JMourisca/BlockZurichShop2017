@@ -1,5 +1,4 @@
 flask
-redis
-scrappy
 flask-cors
 web3
+redis
