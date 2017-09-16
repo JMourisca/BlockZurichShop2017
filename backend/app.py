@@ -5,11 +5,13 @@ from flask import Flask
 from flask import render_template
 from flask import request, jsonify
 
+
 # Flask cors imports.
 from flask_cors import CORS
 
 # Json imports.
 import json
+from urllib import parse
 
 # Logging imports.
 import logging
@@ -24,6 +26,16 @@ from web3 import HTTPProvider
 app = Flask(__name__)
 CORS(app)
 
+def sendMail(FROM,TO,TEXT):
+    import smtplib
+
+    s = smtplib.SMTP('smtp.gmail.com', 587)
+    s.ehlo()
+    s.starttls()
+    s.ehlo()
+    s.login("testhackzurich", "creditsuisse17")
+    s.sendmail(FROM, TO, TEXT)
+    s.quit()
 
 # Store purchase data in json format.
 def get_purchase_data():
@@ -52,6 +64,8 @@ def call_uport(data):
 # Interface to web3.
 def call_web3(confirmed_purchase):
 
+    credentials = str(parse.unquote(confirmed_purchase)).split("&")
+
     web3 = Web3(HTTPProvider("https://mainnet.infura.io/cPqmhj9ZK2EWjKRq3FUG"))
 
     abi = [{"constant":False,"inputs":[{"name":"_merchant","type":"address"},{"name":"_category","type":"bool"},{"name":"_maxOrder","type":"uint256"},{"name":"_amountStock","type":"uint256"}],"name":"addProduct","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_orderID","type":"uint256"}],"name":"returnArrived","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"austrianPost","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"blogOwners","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"electronicProducts","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_productID","type":"uint256"},{"name":"_merchant","type":"address"},{"name":"_blogOwner","type":"address"},{"name":"isSiroop","type":"bool"},{"name":"_amount","type":"uint256"}],"name":"doPurchase","outputs":[{"name":"result","type":"bool"}],"payable":True,"stateMutability":"payable","type":"function"},{"constant":True,"inputs":[],"name":"siroop","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"productStock","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"productMaxOrders","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"products","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_orderID","type":"uint256"}],"name":"productDelivered","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_merchant","type":"address"}],"name":"addMerchant","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_siroop","type":"address"}],"name":"changeSiroop","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_blogOwner","type":"address"}],"name":"addBlogOwner","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"merchants","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"payable":True,"stateMutability":"payable","type":"fallback"},{"anonymous":False,"inputs":[{"indexed":True,"name":"previousOwner","type":"address"},{"indexed":True,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"}]
@@ -62,11 +76,24 @@ def call_web3(confirmed_purchase):
     is_siroop = False
     amount = 1
 
-    MyContract = web3.eth.contract(abi)
-    MyContract.address = "0xc4abd0339eb8d57087278718986382264244252f"
-    success = MyContract.doPurchase(product_id, merchant, blog_owner, is_siroop, amount)
+    #MyContract = web3.eth.contract(abi)
+    #MyContract.address = "0xc4abd0339eb8d57087278718986382264244252f"
+    #success = MyContract.doPurchase(product_id, merchant, blog_owner, is_siroop, amount)
+    success = True
 
-    return success
+    from random import randint
+    order_nr = randint(10000, 100000)
+
+    email = ""
+    for item in credentials:
+        print(item)
+        cred = item.split("=")
+        print(cred[0])
+        if(cred[0] == "credentials[email]"):
+            email = cred[1]
+            sendMail("rudanston@gmail.com",email,"Thank you for buying with us. Your order number is %d" % order_nr)
+
+    return success, order_nr
 
 
 def no_purchase_possible():
@@ -107,17 +134,17 @@ def new_purchase():
 @app.route("/confirm_purchase", methods=["POST"])
 def confirm_purchase():
 
-    jsdata = request.data
+    jsdata = request.data.decode('utf8')
 
     # Call web3 api.
     app.logger.info("confirm_purchase")
 
-    success = call_web3(jsdata)
+    success, order_nr = call_web3(jsdata)
 
     app.logger.info(success)
 
     if success:
-        return jsonify({'msg': 'success'})
+        return jsonify({'msg': 'success', 'order_nr': order_nr})
     else:
         return jsonify("{'msg': 'error'}")
 
