@@ -5,12 +5,16 @@ from flask import Flask
 from flask import render_template
 from flask import request
 
+# Flask cors imports.
+from flask.ext.cors import CORS
+from flask.ext.cors import cross_origin
+
 # Json imports.
 import json
 
 # Web3 imports.
 from web3 import Web3
-from web3 import IPCProvider
+from web3 import HTTPProvider
 
 
 # Call the app.
@@ -43,7 +47,18 @@ def call_uport(data):
 
 # Interface to web3.
 def call_web3(confirmed_purchase):
-    web3 = Web3(IPCProvider())
+    web3 = Web3(HTTPProvider("https://mainnet.infura.io/cPqmhj9ZK2EWjKRq3FUG"))
+    #
+    block_number = web3.eth.blockNumber
+    #
+    account = "0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe"
+    balance = web3.eth.getBalance(account)
+    #
+    print(["block_number: ", block_number])
+    print(["balance: ", balance, " Ether"])
+    print(["data: ",  confirmed_purchase])
+
+    #
     return [True, confirmed_purchase]
 
 
@@ -74,6 +89,7 @@ def index():
 
 # Request new purchase.
 @app.route("/new_purchase", methods=["POST"])
+# @cross_origin(origin="localhost", headers=["Content-Type", "Authorization"])
 def new_purchase():
 
     # Get new purchase data as json.
@@ -90,26 +106,37 @@ def new_purchase():
         # on what it will be: angular, ajax, etc.
         return no_purchase_possible()
 
+
     # Set processed data with the result from uport into html popup.
     # Again, depends on if it is angular, ajax, etc.
     return set_popup_data_in_html(success_popup_data)
 
 
+
 # Confirm final purchase.
+# @cross_origin(origin="localhost", headers=["Content-Type", "Authorization"])
 @app.route("/confirm_purchase", methods=["POST"])
 def confirm_purchase():
 
     # Request the confirmed purchase as json.
-    confirmed_purchase = get_confirmed_purchase()
+    # confirmed_purchase = get_confirmed_purchase()
 
-    # Call web3 api.
-    success, confirmed_purchase = call_web3(confirmed_purchase)
+    jsdata = json.loads(request.data)
+    print(jsdata)
 
-    # Here we again generate the proper popup with angular or whatever.
-    if success:
-        return print_success_message(confirmed_purchase)
-    else:
-        return print_error_message()
+    return jsdata
+
+    # confirmed_purchase = json.loads(jsdata)[0]
+    #
+    #
+    # # Call web3 api.
+    # success, confirmed_purchase = call_web3(confirmed_purchase)
+    #
+    # # Here we again generate the proper popup with angular or whatever.
+    # if success:
+    #     return print_success_message(confirmed_purchase)
+    # else:
+    #     return print_error_message()
 
 
 if __name__ == "__main__":

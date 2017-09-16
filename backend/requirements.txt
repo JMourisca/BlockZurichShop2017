@@ -1,4 +1,5 @@
 flask
-web3
 redis
 scrappy
+flask-cors
+web3

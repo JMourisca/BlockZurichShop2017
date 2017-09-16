@@ -5,11 +5,30 @@ import "./Ownable.sol";
 contract SmartBuyer is Ownable {
 
   address public siroop;
+  address public austrianPost;
   //mapping (address => bool) public affiliates;
   mapping (address => bool) public merchants;
   mapping (address => bool) public blogOwners;
+
+  uint productPointer;
   mapping (uint => address) public products;
   mapping (uint => bool) public electronicProducts;
+
+  // Orders
+  uint orderPointer;
+  mapping (uint => address) orders;
+  mapping (uint => address) ordersMerchant;
+  mapping (uint => uint) orderAmount;
+  mapping (uint => bool) orderRefunded;
+  mapping (address => uint) deliveredOrders;
+
+
+
+  // Settings
+  mapping (uint => uint) public productMaxOrders;
+  mapping (uint => uint) public productStock;
+
+
 
   // Affiliate bonus in percent
   /*
@@ -46,6 +65,18 @@ contract SmartBuyer is Ownable {
     _;
   }
 
+  // Enforce ToS max amount per purchase
+  modifier checkMaxOrders(uint _productID, uint _order) {
+    require(productMaxOrders[_productID] >= _order);
+    _;
+  }
+
+  // Enforce ToS check if there are enough procuts in stock
+  modifier checkProductStock(uint _productID, uint _order) {
+    require(productStock[_productID] >= _order);
+    _;
+  }
+
   function changeSiroop(address _siroop) public onlyOwner {
     require(_siroop != 0x0);
     siroop = _siroop;
@@ -60,19 +91,48 @@ contract SmartBuyer is Ownable {
     blogOwners[_blogOwner] = true;
   }
 
-  function addProduct(uint _productID, address _merchant, bool _category) public onlyOwner {
-    products[_productID] = _merchant;
-    electronicProducts[_productID] = _category;
+  function addProduct(address _merchant, bool _category, uint _maxOrder, uint _amountStock) public onlyOwner {
+    products[productPointer] = _merchant;
+    electronicProducts[productPointer] = _category;
+    productMaxOrders[productPointer] = _maxOrder;
+    productStock[productPointer] = _amountStock;
+    productPointer++;
   }
 
+  // package delivery
+  function productDelivered(uint _orderID) {
+    // only the buyer can call this method
+    require(msg.sender == orders[_orderID]);
+    deliveredOrders[msg.sender] = now;
+  }
+
+
+  // this method is triggered by the merchant once the return arrives
+  function returnArrived(uint _orderID) {
+      require(msg.sender == orders[_orderID] && now <= (deliveredOrders[msg.sender] + 14 days) && !orderRefunded[_orderID]);
+      require(orderAmount[_orderID] <= this.balance);
+      orderRefunded[_orderID] = true;
+      orders[_orderID].transfer(orderAmount[_orderID]);
+  }
+
+
   // Check if user provided parameters are on whitelist otherwise an attack could inject own parameters
-  function doPurchase(uint _productID, address _merchant, address _blogOwner, bool isSiroop) payable public
+  function doPurchase(uint _productID, address _merchant, address _blogOwner, bool isSiroop, uint _amount) payable public
 
   isMerchant(_merchant)
   isBlogOwner(_blogOwner)
   productFitsMerchant(_productID, _merchant)
+  checkMaxOrders(_productID, _amount)
+  checkProductStock(_productID, _amount)
+  // TODO: implement price check of product, currently every price is accepted!!
   returns(bool result) {
     result = saveSplit(_productID, _merchant, _blogOwner, isSiroop);
+
+    orders[orderPointer] = msg.sender;
+    orderAmount[orderPointer] = msg.value;
+    ordersMerchant[orderPointer] = _merchant;
+    orderPointer++;
+
     return result;
   }
 
@@ -125,7 +185,12 @@ contract SmartBuyer is Ownable {
     }
 
     // Something went wrong, revert the transaction
-    return false;
+    revert();
+
+  }
+
+  // just some cash being sent. This is used for returns. Proper deposit method has to be implemented
+  function() payable {
 
   }
 
