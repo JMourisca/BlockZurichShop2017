@@ -1,9 +1,7 @@
 from flask import Flask, render_template, jsonify
-from redis import Redis
 from web3 import Web3, IPCProvider
 
 app = Flask(__name__)
-redis = Redis(host='redis', port=6379)
 
 @app.route('/')
 def index():
@@ -11,8 +9,7 @@ def index():
     #
     # blockNumber = web3.eth.blockNumber
     blockNumber = 1
-    count = redis.incr('hits')
-    return render_template('index.html', my_string="Wheeeee!", blockNumber=blockNumber, count=count)
+    return render_template('index.html', my_string="HackZurich!", blockNumber=blockNumber)
 
 @app.route('/postexample', methods=['POST'])
 def post_method():
