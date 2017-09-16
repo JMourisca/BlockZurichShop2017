@@ -101,7 +101,6 @@ def new_purchase():
         # on what it will be: angular, ajax, etc.
         return no_purchase_possible()
 
-
     # Set processed data with the result from uport into html popup.
     # Again, depends on if it is angular, ajax, etc.
     return set_popup_data_in_html(success_popup_data)
