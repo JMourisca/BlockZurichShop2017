@@ -49,15 +49,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     </li>
                 </ul>
             </div>
-            <div class="header-right">
-                <!--<div class="cart box_1">-->
-                <!--<a href="checkout.html">-->
-                <!--<h3> <span class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span>)<img src="images/bag.png" alt=""></h3>-->
-                <!--</a>	-->
-                <!--<p><a href="javascript:;" class="simpleCart_empty">Empty cart</a></p>-->
-                <!--<div class="clearfix"> </div>-->
-                <!--</div>-->
-            </div>
+            <div class="header-right"></div>
             <div class="clearfix"></div>
         </div>
     </div>
@@ -86,23 +78,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     Party in Zurich, which I discovered on <strong>karneval-megastore</strong>:
                 </p>
 
-                <div class="well well-sm">
-                    <p class="small">
-                        <span class="help-block">
-                            <a href="{{$ctrl.articles[2].url}}">
-                                {{$ctrl.articles[2].name}}
-                            </a>
-                        </span>
-                    </p>
-                    <p class="text-center">
-                        <img class="thumbnail" style="display:initial; height: 320px;width: 240px" src="images/p3.jpg">
-                    </p>
-                    <button class="btn btn-success btn-sm pull-right" type="button" ng-click="$ctrl.buy(2)">
-                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                        Buy - 20 ETH
-                    </button>
-                    <div class="clearfix"></div>
-                </div>
+                <article-box article="$ctrl.articles[2]" exchange="$ctrl.exchange"></article-box>
 
                 <p>
                     And guess what, when I showed my dresses to my boyfriend, who is from one of the richest families in
@@ -119,43 +95,5 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </div>
     </div>
 </div>
-<script type="text/ng-template" id="myModalContent.html">
-    <div class="modal-header" ng-if="!$ctrl.loading">
-        <h4>{{$ctrl.selected_article.name}}</h4>
-    </div>
-    <div class="modal-body" id="modal-body">
-        <span ng-if="$ctrl.loading">
-            <img src="images/ajax-loader.gif">
-        </span>
-        <div ng-if="!$ctrl.loading">
-            <div class="form-inline">
-                <div class="form-group">
-                    <label for="size">Size</label>
-                    <select class="form-control" id="size">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="color">Color</label>
-                    <select class="form-control" id="color">
-                        <option>Black & Red</option>
-                        <option>Black & Green</option>
-                        <option>Purple & Orange</option>
-                    </select>
-                </div>
-            </div>
-            <p class="text-center">
-                <span>
-                    <img src="images/qr.png">
-                </span>
-            </p>
-            <p>
-                Some help about what to do to procede.
-            </p>
-        </div>
-    </div>
-</script>
 </body>
 </html>

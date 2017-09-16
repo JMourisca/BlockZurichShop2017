@@ -10,7 +10,7 @@ app.controller('ProductsController', function PhoneListController($scope, $uibMo
     $ctrl.exchange = 1;
 
     $http.get("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=ETH,EUR").then(
-        function(res) {
+        function (res) {
             $ctrl.exchange = res.data["EUR"];
         }
     );
@@ -28,47 +28,24 @@ app.controller('ProductsController', function PhoneListController($scope, $uibMo
     );
 
     $ctrl.articles[2] = {
-            name: "Blutige Zombie Krankenschwester Halloween Plus Size Damenkostüm rot-weiss",
-            url: "http://www.karneval-megastore.de/blutige-zombie-krankenschwester-halloween-plus-size-damenkostuem-rot-weiss.html"
-        };
-
-    $ctrl.buy = function (index) {
-        $ctrl.open = function (size, parentSelector) {
-            var parentElem = parentSelector ?
-                angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
-            var modalInstance = $uibModal.open({
-                animation: $ctrl.animationsEnabled,
-                ariaLabelledBy: 'modal-title',
-                ariaDescribedBy: 'modal-body',
-                templateUrl: 'myModalContent.html',
-                controller: 'ModalInstanceCtrl',
-                controllerAs: '$ctrl',
-                size: size,
-                appendTo: parentElem,
-                resolve: {
-                    selected_article: function () {
-                        return $ctrl.articles[index];
-                    }
-                }
-            });
-
-            modalInstance.result.then(function (selectedItem) {
-                $ctrl.selected = selectedItem;
-            }, function () {
-                $log.info('Modal dismissed at: ' + new Date());
-            });
-        }
-        $ctrl.open()
+        name: "Blutige Zombie Krankenschwester Halloween Plus Size Damenkostüm rot-weiss",
+        url: "http://www.karneval-megastore.de/blutige-zombie-krankenschwester-halloween-plus-size-damenkostuem-rot-weiss.html",
+        price: 2899,
+        images: {
+            highres: "images/p3.jpg"
+        },
+        description: "",
+        tags: []
     };
 }).controller('ModalInstanceCtrl', function ($uibModalInstance, $log, $http, selected_article) {
     var $ctrl = this;
     $ctrl.loading = true;
     $ctrl.selected_article = selected_article;
 
-    $http.get("http://localhost:5000/test").then(function (res) {
+    //$http.get("http://localhost:5000/test").then(function (res) {
         $ctrl.loading = false;
-        return $ctrl.selected_article;
-    });
+      //  return $ctrl.selected_article;
+    //});
 
     $log.info($ctrl.selected_article);
 
@@ -85,8 +62,36 @@ app.controller('ProductsController', function PhoneListController($scope, $uibMo
         article: "<",
         exchange: "<"
     },
-    controller: function ArticleBoxController() {
-        var ctrl = this;
-        //ctrl.article = article;
+    controller: function ArticleBoxController($uibModal, $log) {
+        var $ctrl = this;
+
+        $ctrl.buy = function () {
+            $ctrl.open = function (size, parentSelector) {
+                var parentElem = parentSelector ?
+                    angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+                var modalInstance = $uibModal.open({
+                    animation: $ctrl.animationsEnabled,
+                    ariaLabelledBy: 'modal-title',
+                    ariaDescribedBy: 'modal-body',
+                    templateUrl: 'myModalContent.html',
+                    controller: 'ModalInstanceCtrl',
+                    controllerAs: '$ctrl',
+                    size: size,
+                    appendTo: parentElem,
+                    resolve: {
+                        selected_article: function () {
+                            return $ctrl.article;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (selectedItem) {
+                    $ctrl.selected = selectedItem;
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            }
+            $ctrl.open();
+        };
     }
 });
