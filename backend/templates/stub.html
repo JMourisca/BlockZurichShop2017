@@ -5,6 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Stub page</title>
+
+    <script src="https://unpkg.com/uport-connect/dist/uport-connect.min.js"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='kjua.min.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='jquery.min.js') }}"></script>
+
 </head>
 
 <body>
@@ -13,14 +19,54 @@
     <form action="/new_purchase" method="post">
         <input type="text" name="purchase_id" placeholder="purchase id">
         <input type="text" name="purchase_name" placeholder="purchase name">
-        <input type="submit" value="Buy">
+        <input type="submit" onclick="loginBtn()" value="Buy">
     </form>
 
     <h1>Confirm purchase:</h1>
-    <form action="/confirm_purchase" method="post">
+    <form action="/confirm_purchase1" method="post">
         <input type="text" name="confirmed_purchase" placeholder="confirmed purchase">
         <input type="submit" value="Confirm">
     </form>
+
+    <br>
+    <div id="qrcode"></div>
+
+    <script>
+
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+    var uportconnect = window.uportconnect
+
+    const uport = new uportconnect.Connect('Juliana\'s new app', {
+
+        clientId: '2odUiw5GfTvpNAMuGgLoxYvydLfzHbSytBw',
+        network: 'rinkeby',
+        signer: uportconnect.SimpleSigner('6bfb53228fdc0511e3af337a7d2dda5fcf57a19e98467b9554056bf7db909bdd')
+    })
+
+    uport.requestCredentials({
+
+        requested: ['name', 'phone', 'country'],
+        notifications: true
+
+    }).then((credentials) => {
+
+        console.log(credentials)
+
+$.ajax({
+  type: 'POST',
+  url: "http://172.18.0.2:5000/confirm_purchase",
+  data: JSON.stringify({"test": "test"}),
+  error: function(e) {
+    console.log(e);
+  },
+  dataType: "json",
+  contentType: "application/json"
+});
+
+    })
+
+    </script>
 
 </body>
 
