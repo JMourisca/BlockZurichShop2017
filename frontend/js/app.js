@@ -70,8 +70,6 @@ app.controller('ProductsController', function PhoneListController($scope, $uibMo
                     exchange: $ctrl.exchange
                 };
             }
-
-            console.log($ctrl.article);
         };
 
         $ctrl.buy = function () {
