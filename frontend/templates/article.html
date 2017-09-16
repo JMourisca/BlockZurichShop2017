@@ -37,9 +37,9 @@
         </span>
         <div ng-if="!$ctrl.loading">
             <div class="form-inline">
-                <div class="form-group">
+                <div class="form-group" style="width: 140px">
                     <label for="size">Amount</label>
-                    <input type="number" class="form-control" placeholder="Amount">
+                    <input type="number" style="width: 85px" class="form-control" id="amount" ng-model="$ctrl.amount" placeholder="Amount">
                 </div>
                 <div class="form-group">
                     <label for="size">Size</label>
@@ -57,63 +57,66 @@
                         <option>Purple & Orange</option>
                     </select>
                 </div>
+                <div class="form-group" style="width: 150px">
+                    <label for="totalAmount">Total</label>
+                    <input  style="width: 116px" type="text" class="form-control" readonly ng-value="($ctrl.amount * $ctrl.selected_article.price/(100 * $ctrl.selected_article.exchange) | currency:'ETH ')">
+                    <input type="hidden" id="unitValue" ng-value="$ctrl.selected_article.price/(100 * $ctrl.selected_article.exchange)">
             </div>
             <p class="text-center">
-                <span>
-                    <div id="qrcode"></div>
-                    <script>
+                <div id="qrcode" style="text-align: center;margin-top: 20px"></div>
+            </p>
+            <p>
+                <span class="help-block">Some help about what to do to procede.</span>
+            </p>
+            <p class="text-right">
+                Powered by
+                <span style="background-color: #5f32b8;padding: 5px 5px 8px;">
+                    <img style="height: 20px"
+                         src="//static1.squarespace.com/static/587fd54aa5790a84241a00e6/t/59b020b79f8dced99c4f70da/1504717205849/?format=1500w">
+                </span>
+            </p>
+        </div>
+    </div>
+    <script>
+    var uportconnect = window.uportconnect;
 
-                        //    $SCRIPT_ROOT = {{
-                        //            request.script_root | tojson | safe
-                        //        }
-                        //    }
-                        //    ;
+    const uport = new uportconnect.Connect('Juliana\'s new app', {
+        clientId: '2odUiw5GfTvpNAMuGgLoxYvydLfzHbSytBw',
+        network: 'rinkeby',
+        signer: uportconnect.SimpleSigner('6bfb53228fdc0511e3af337a7d2dda5fcf57a19e98467b9554056bf7db909bdd')
+    });
 
-                        var uportconnect = window.uportconnect;
+    uport.requestCredentials(
+        {
+            requested: ['name', 'phone', 'country'],
+            notifications: true
+        },
+        (credentials) => {
+            const qr = kjua({
+                text: credentials,
+                size: 400,
+                fill: "#816263"
+            });
 
-                        const uport = new uportconnect.Connect('Juliana\'s new app', {
-                            clientId: '2odUiw5GfTvpNAMuGgLoxYvydLfzHbSytBw',
-                            network: 'rinkeby',
-                            signer: uportconnect.SimpleSigner('6bfb53228fdc0511e3af337a7d2dda5fcf57a19e98467b9554056bf7db909bdd')
-                        });
-
-                        uport.requestCredentials(
-                            {
-                                requested: ['name', 'phone', 'country'],
-                                notifications: true
-                            },
-                            (credentials) => {
-                                const qr = kjua({
-                                    text: credentials,
-                                    size: 400
-                                });
-
-                            document.getElementById("qrcode").appendChild(qr);
-                            }
-                        ).then(
-                                (credentials) => {
-
-                                    console.log(credentials);
-
-                                    $.ajax({
-                                        type: 'POST',
-                                        url: "http://localhost:5000/confirm_purchase",
-                                        data: {"credentials": credentials},
-                                        error: function (e) {
-                                            console.log(e);
-                                        },
-                                        dataType: "json",
-                                        contentType: "application/json"
-                                    });
-
-                        });
+            document.getElementById("qrcode").appendChild(qr);
+        }
+    ).then(
+        (credentials) => {
+            var data = {
+                "credentials": credentials,
+                "amount": document.getElementById("amount")
+            };
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:5000/confirm_purchase",
+                data: data,
+                error: function (e) {
+                   console.log(e);
+                },
+                dataType: "json",
+                    contentType: "application/json"
+                });
+            });
 
 </script>
-</span>
-</p>
-<p>
-    Some help about what to do to procede.
-</p>
-</div>
-</div>
 </script>

@@ -24,6 +24,7 @@ app.controller('ProductsController', function PhoneListController($scope, $uibMo
     var $ctrl = this;
     $ctrl.loading = true;
     $ctrl.selected_article = selected_article;
+    $ctrl.amount = 1;
 
     //$http.get("http://localhost:5000/test").then(function (res) {
     $ctrl.loading = false;
@@ -49,11 +50,11 @@ app.controller('ProductsController', function PhoneListController($scope, $uibMo
         var $ctrl = this;
 
         $ctrl.$onInit = function () {
-            console.log($ctrl.sku);
             if ($ctrl.sku != undefined && $ctrl.sku !== "") {
                 $http.get("https://api.siroop.ch/product/concretes/sku/" + $ctrl.sku + "?apikey=8ccd66bb1265472cbf8bed4458af4b07").then(
                     function (res) {
                         $ctrl.article = res.data[0];
+                        $ctrl.article["exchange"] = $ctrl.exchange;
                     }
                 );
             } else {
@@ -65,9 +66,12 @@ app.controller('ProductsController', function PhoneListController($scope, $uibMo
                         highres: "images/p3.jpg"
                     },
                     description: "",
-                    tags: []
+                    tags: [],
+                    exchange: $ctrl.exchange
                 };
             }
+
+            console.log($ctrl.article);
         };
 
         $ctrl.buy = function () {
