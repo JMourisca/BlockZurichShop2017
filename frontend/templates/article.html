@@ -1,0 +1,24 @@
+<div class="well well-sm">
+    <p class="small">
+        <span class="help-block">
+            <a href="https://siroop.ch{{$ctrl.article.url}}" target="_blank">
+                {{$ctrl.article.name}}
+            </a>
+        </span>
+    </p>
+    <p class="text-center">
+        <img class="thumbnail" style="display:initial;"
+             src="{{$ctrl.article.images.highres}}">
+    </p>
+    <p class="small" ng-bind-html="$ctrl.article.description"></p>
+    <p style="margin-bottom: 5px">
+        <span class="label label-primary small" style="margin-right: 5px" ng-repeat="tag in $ctrl.article.tags">{{tag}}</span>
+    </p>
+    <button class="btn btn-success btn-sm pull-right" type="button" ng-click="$ctrl.buy(0)">
+        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+        Buy -
+        {{$ctrl.article.price/100 | currency:"€ "}} /
+        {{($ctrl.article.price/$ctrl.exchange)/100 | currency:"ETH "}}*
+    </button>
+    <div class="clearfix"></div>
+</div>
