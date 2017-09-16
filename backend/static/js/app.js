@@ -20,6 +20,17 @@ app.controller('ProductsController', function PhoneListController($scope, $uibMo
             $ctrl.articles[1] = res.data[0];
         }
     );
+
+    $ctrl.articles[2] = {
+        name: "Blutige Zombie Krankenschwester Halloween Plus Size Damenkostüm rot-weiss",
+        url: "http://www.karneval-megastore.de/blutige-zombie-krankenschwester-halloween-plus-size-damenkostuem-rot-weiss.html",
+        price: 2899,
+        images: {
+            highres: "images/p3.jpg"
+        },
+        description: "",
+        tags: []
+    };
 }).controller('ModalInstanceCtrl', function ($uibModalInstance, $log, $http, selected_article) {
     var $ctrl = this;
     $ctrl.loading = true;
@@ -48,27 +59,15 @@ app.controller('ProductsController', function PhoneListController($scope, $uibMo
     controller: function ArticleBoxController($uibModal, $log, $http) {
         var $ctrl = this;
 
-        $ctrl.$onInit = function () {
-            console.log($ctrl.sku);
-            if ($ctrl.sku != undefined && $ctrl.sku !== "") {
-                $http.get("https://api.siroop.ch/product/concretes/sku/" + $ctrl.sku + "?apikey=8ccd66bb1265472cbf8bed4458af4b07").then(
-                    function (res) {
-                        $ctrl.article = res.data[0];
-                    }
-                );
-            } else {
-                $ctrl.article = {
-                    name: "Blutige Zombie Krankenschwester Halloween Plus Size Damenkostüm rot-weiss",
-                    url: "http://www.karneval-megastore.de/blutige-zombie-krankenschwester-halloween-plus-size-damenkostuem-rot-weiss.html",
-                    price: 2899,
-                    images: {
-                        highres: "images/p3.jpg"
-                    },
-                    description: "",
-                    tags: []
-                };
-            }
-        };
+        $log.info($ctrl);
+
+        if($ctrl.sku !== "") {
+            $http.get("https://api.siroop.ch/product/concretes/sku/" + $ctrl.sku + "?apikey=8ccd66bb1265472cbf8bed4458af4b07").then(
+                function (res) {
+                    $ctrl.article = res.data[0];
+                }
+            );
+        }
 
         $ctrl.buy = function () {
             $ctrl.open = function (size, parentSelector) {
@@ -95,7 +94,7 @@ app.controller('ProductsController', function PhoneListController($scope, $uibMo
                 }, function () {
                     $log.info('Modal dismissed at: ' + new Date());
                 });
-            };
+            }
             $ctrl.open();
         };
     }

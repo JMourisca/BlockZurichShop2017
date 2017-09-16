@@ -38,7 +38,7 @@
         <div ng-if="!$ctrl.loading">
             <div class="form-inline">
                 <div class="form-group">
-                    <label for="size">Amoung</label>
+                    <label for="size">Amount</label>
                     <input type="number" class="form-control" placeholder="Amount">
                 </div>
                 <div class="form-group">
@@ -60,12 +60,60 @@
             </div>
             <p class="text-center">
                 <span>
-                    <img src="images/qr.png">
-                </span>
-            </p>
-            <p>
-                Some help about what to do to procede.
-            </p>
-        </div>
-    </div>
+                    <div id="qrcode"></div>
+                    <script>
+
+                        //    $SCRIPT_ROOT = {{
+                        //            request.script_root | tojson | safe
+                        //        }
+                        //    }
+                        //    ;
+
+                        var uportconnect = window.uportconnect;
+
+                        const uport = new uportconnect.Connect('Juliana\'s new app', {
+                            clientId: '2odUiw5GfTvpNAMuGgLoxYvydLfzHbSytBw',
+                            network: 'rinkeby',
+                            signer: uportconnect.SimpleSigner('6bfb53228fdc0511e3af337a7d2dda5fcf57a19e98467b9554056bf7db909bdd')
+                        });
+
+                        uport.requestCredentials(
+                            {
+                                requested: ['name', 'phone', 'country'],
+                                notifications: true
+                            },
+                            (credentials) => {
+                                const qr = kjua({
+                                    text: credentials,
+                                    size: 400
+                                });
+
+                            document.getElementById("qrcode").appendChild(qr);
+                            }
+                        ).then(
+                                (credentials) => {
+
+                                    console.log(credentials);
+
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: "http://localhost:5000/confirm_purchase",
+                                        data: {"credentials": credentials},
+                                        error: function (e) {
+                                            console.log(e);
+                                        },
+                                        dataType: "json",
+                                        contentType: "application/json"
+                                    });
+
+                        });
+
+</script>
+</span>
+</p>
+<p>
+    Some help about what to do to procede.
+</p>
+</div>
+</div>
 </script>
