@@ -31,6 +31,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <!-- cart -->
     <script src="js/simpleCart.min.js"></script>
     <script src="js/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-sanitize.min.js"></script>
     <script src="js/ui-bootstrap-tpls-2.5.0.min.js"></script>
     <script src="js/app.js"></script>
     <!-- cart -->
@@ -48,15 +49,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     </li>
                 </ul>
             </div>
-            <div class="header-right">
-                <!--<div class="cart box_1">-->
-                <!--<a href="checkout.html">-->
-                <!--<h3> <span class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span>)<img src="images/bag.png" alt=""></h3>-->
-                <!--</a>	-->
-                <!--<p><a href="javascript:;" class="simpleCart_empty">Empty cart</a></p>-->
-                <!--<div class="clearfix"> </div>-->
-                <!--</div>-->
-            </div>
+            <div class="header-right"></div>
             <div class="clearfix"></div>
         </div>
     </div>
@@ -78,81 +71,29 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     Dirndl costume from <strong>siroop</strong>:
                 </p>
 
-                <div class="well well-sm">
-                    <p class="small">
-                        <span class="help-block">
-                            <a href="https://siroop.ch/mode-accessoires/damenmode/trachtenmode-dirndl/oktoberfest-dirndl-shirt-fotorealistisch-01046629">
-                                Oktoberfest Dirndl, Bayern Girl
-                            </a>
-                        </span>
-                    </p>
-                    <p class="text-center">
-                        <img class="thumbnail" style="display:initial; height: 300px;width: 300px" src="images/p1.jpg">
-                    </p>
-                    <button class="btn btn-success btn-sm pull-right" ng-click="$ctrl.open(1)">
-                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                        Buy - 15 ETH
-                    </button>
-                    <div class="clearfix"></div>
-                </div>
+                <article-box article="$ctrl.articles[0]" exchange="$ctrl.exchange"></article-box>
 
                 <p>
                     And because I was in shopping mood I also ordered an amazing costume for the upcoming Halloween
                     Party in Zurich, which I discovered on <strong>karneval-megastore</strong>:
                 </p>
 
-                <div class="well well-sm">
-                    <p class="small">
-                        <span class="help-block">
-                            <a href="http://www.karneval-megastore.de/blutige-zombie-krankenschwester-halloween-plus-size-damenkostuem-rot-weiss.html">
-                                Blutige Zombie Krankenschwester Halloween Plus Size Damenkostüm rot-weiss
-                            </a>
-                        </span>
-                    </p>
-                    <p class="text-center">
-                        <img class="thumbnail" style="display:initial; height: 320px;width: 240px" src="images/p3.jpg">
-                    </p>
-                    <button class="btn btn-success btn-sm pull-right" ng-click="$ctrl.open(3)">
-                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                        Buy - 20 ETH
-                    </button>
-                    <div class="clearfix"></div>
-                </div>
+                <article-box article="$ctrl.articles[2]" exchange="$ctrl.exchange"></article-box>
 
                 <p>
                     And guess what, when I showed my dresses to my boyfriend, who is from one of the richest families in
-                    Zurich, he actually bought this amazing wine from <strong>Baur au Lac Vins</strong> at the <strong>siroop</strong> website to surprise
+                    Zurich, he actually bought this amazing wine from <strong>Baur au Lac Vins</strong> at the <strong>siroop</strong>
+                    website to surprise
                     me:
                 </p>
 
-                <div class="well well-sm">
-                    <p class="small">
-                        <span class="help-block">
-                            <a href="https://siroop.ch/lebensmittel-getraenke/wein/rotwein/ch-mouton-rothschild-2010-chateau-mouton-rothschild-75-cl-0499738">
-                                Oktoberfest Dirndl Shirt, Fotorealistisch
-                            </a>
-                        </span>
-                    </p>
-                    <p class="text-center">
-                        <img class="thumbnail" style="display:initial; height: 300px;width: 300px" src="images/p2.jpg">
-                    </p>
-                    <button class="btn btn-success btn-sm pull-right" type="button" ng-click="$ctrl.open(2)">
-                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                        Buy - 10 ETH
-                    </button>
-                    <div class="clearfix"></div>
-                </div>
-
+                <article-box article="$ctrl.articles[1]" exchange="$ctrl.exchange"></article-box>
 
             </div>
             <div class="clearfix"></div>
+            <h5>ETH 1 = € {{$ctrl.exchange}}</h5>
         </div>
     </div>
 </div>
-<script type="text/ng-template" id="myModalContent.html">
-    <div class="modal-body" id="modal-body">
-        Here goes something.
-    </div>
-</script>
 </body>
 </html>
