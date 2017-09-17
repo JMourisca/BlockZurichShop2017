@@ -5,7 +5,6 @@ from flask import Flask
 from flask import render_template
 from flask import request, jsonify
 
-
 # Flask cors imports.
 from flask_cors import CORS
 
@@ -19,8 +18,8 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 # Web3 imports.
-from web3 import Web3
-from web3 import HTTPProvider
+# from web3 import Web3
+# from web3 import HTTPProvider
 
 
 # Call the app.
@@ -67,19 +66,20 @@ def call_web3(confirmed_purchase):
 
     credentials = str(parse.unquote(confirmed_purchase)).split("&")
 
-    web3 = Web3(HTTPProvider("https://mainnet.infura.io/cPqmhj9ZK2EWjKRq3FUG"))
+    # web3 = Web3(HTTPProvider("https://mainnet.infura.io/cPqmhj9ZK2EWjKRq3FUG"))
 
-    abi = [{"constant":False,"inputs":[{"name":"_merchant","type":"address"},{"name":"_category","type":"bool"},{"name":"_maxOrder","type":"uint256"},{"name":"_amountStock","type":"uint256"}],"name":"addProduct","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_orderID","type":"uint256"}],"name":"returnArrived","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"austrianPost","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"blogOwners","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"electronicProducts","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_productID","type":"uint256"},{"name":"_merchant","type":"address"},{"name":"_blogOwner","type":"address"},{"name":"isSiroop","type":"bool"},{"name":"_amount","type":"uint256"}],"name":"doPurchase","outputs":[{"name":"result","type":"bool"}],"payable":True,"stateMutability":"payable","type":"function"},{"constant":True,"inputs":[],"name":"siroop","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"productStock","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"productMaxOrders","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"products","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_orderID","type":"uint256"}],"name":"productDelivered","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_merchant","type":"address"}],"name":"addMerchant","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_siroop","type":"address"}],"name":"changeSiroop","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_blogOwner","type":"address"}],"name":"addBlogOwner","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"merchants","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"payable":True,"stateMutability":"payable","type":"fallback"},{"anonymous":False,"inputs":[{"indexed":True,"name":"previousOwner","type":"address"},{"indexed":True,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"}]
+    # abi = [{"constant":False,"inputs":[{"name":"_merchant","type":"address"},{"name":"_category","type":"bool"},{"name":"_maxOrder","type":"uint256"},{"name":"_amountStock","type":"uint256"}],"name":"addProduct","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_orderID","type":"uint256"}],"name":"returnArrived","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"austrianPost","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"blogOwners","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"electronicProducts","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_productID","type":"uint256"},{"name":"_merchant","type":"address"},{"name":"_blogOwner","type":"address"},{"name":"isSiroop","type":"bool"},{"name":"_amount","type":"uint256"}],"name":"doPurchase","outputs":[{"name":"result","type":"bool"}],"payable":True,"stateMutability":"payable","type":"function"},{"constant":True,"inputs":[],"name":"siroop","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"productStock","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"productMaxOrders","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"products","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_orderID","type":"uint256"}],"name":"productDelivered","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_merchant","type":"address"}],"name":"addMerchant","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_siroop","type":"address"}],"name":"changeSiroop","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_blogOwner","type":"address"}],"name":"addBlogOwner","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"merchants","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"payable":True,"stateMutability":"payable","type":"fallback"},{"anonymous":False,"inputs":[{"indexed":True,"name":"previousOwner","type":"address"},{"indexed":True,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"}]
 
-    product_id = 0
-    merchant = "0x9838ECaa5D49a01e1B6e13bA07bDc87a6AEBab92"
-    blog_owner = "0x2a86D62A7e5860a275A2ace8bfe3141dC7EE907D"
-    is_siroop = False
-    amount = 1
+    # product_id = 0
+    # merchant = "0x9838ECaa5D49a01e1B6e13bA07bDc87a6AEBab92"
+    # blog_owner = "0x2a86D62A7e5860a275A2ace8bfe3141dC7EE907D"
+    # is_siroop = False
+    # amount = 1
 
-    #MyContract = web3.eth.contract(abi)
-    #MyContract.address = "0xc4abd0339eb8d57087278718986382264244252f"
-    #success = MyContract.doPurchase(product_id, merchant, blog_owner, is_siroop, amount)
+    # MyContract = web3.eth.contract(abi)
+    # MyContract.address = "0xc4abd0339eb8d57087278718986382264244252f"
+    # success = MyContract.doPurchase(product_id, merchant, blog_owner, is_siroop, amount)
+
     urllib.request.urlopen("http://web3-signer:8080/api/do_transaction").read()
 
     success = True
@@ -130,7 +130,6 @@ def new_purchase():
         return no_purchase_possible()
 
     return set_popup_data_in_html(success_popup_data)
-
 
 
 # Confirm final purchase.
